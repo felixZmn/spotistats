@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "spotistats.fullname" . }}-web
+  labels:
+    {{- include "spotistats.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: web
+      {{- include "spotistats.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app.kubernetes.io/component: web
+        {{- include "spotistats.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      containers:
+        - name: web
+          image: yooooomi/your_spotify_client:1.12.0
+          ports:
+            - containerPort: 3000
+          env:
+            - name: API_ENDPOINT
+              value: {{ if .Values.api.ingress.tls.enabled }}https://{{ else }}http://{{ end }}{{ .Values.api.ingress.host }}

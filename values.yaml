@@ -1,0 +1,25 @@
+vars:
+  SPOTIFY_PUBLIC: ""
+  SPOTIFY_SECRET: ""
+  TIMEZONE: "Europe/Berlin"
+  LOG_LEVEL: "info"
+
+api:
+  ingress:
+    host: ""
+    className: "nginx"
+    annotations: {}
+    tls:
+      enabled: true
+      secretName: "spotistats-api-tls"
+      issuer: "letsencrypt-staging"
+
+web:
+  ingress:
+    host: ""
+    className: "nginx"
+    annotations: {}
+    tls:
+      enabled: true
+      secretName: "spotistats-tls"
+      issuer: "letsencrypt-staging"

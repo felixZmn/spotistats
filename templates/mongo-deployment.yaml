@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "spotistats.fullname" . }}-mongo
+  labels:
+    {{- include "spotistats.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: mongo
+      {{- include "spotistats.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app.kubernetes.io/component: mongo
+        {{- include "spotistats.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      containers:
+        - name: mongo
+          image: mongo:6
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: {{ include "spotistats.fullname" . }}-storage
+              mountPath: /data/db
+      volumes:
+        - name: {{ include "spotistats.fullname" . }}-storage
+          persistentVolumeClaim:
+            claimName: {{ include "spotistats.fullname" . }}-pvc

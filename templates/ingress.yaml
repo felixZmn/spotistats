@@ -1,0 +1,76 @@
+{{ $webIngress := .Values.web.ingress }}
+{{ $apiIngress := .Values.api.ingress }}
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "spotistats.fullname" . }}-web
+  labels:
+    {{- include "spotistats.labels" . | nindent 4 }}
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    {{- if $webIngress.tls.enabled}}
+    cert-manager.io/cluster-issuer: {{ $webIngress.tls.issuer }}
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    {{- end }}
+    {{- with $webIngress.annotations }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  {{- with $webIngress.className }}
+  ingressClassName: {{ . }}
+  {{- end }}
+  {{- if $webIngress.tls.enabled }}
+  tls:
+    - hosts:
+        - {{ $webIngress.host }}
+      secretName: {{ $webIngress.tls.secretName }}
+  {{- end }}
+  rules:
+    - host: {{ $webIngress.host }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "spotistats.fullname" . }}-web
+                port:
+                  number: 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "spotistats.fullname" . }}-api
+  labels:
+    {{- include "spotistats.labels" . | nindent 4 }}
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    {{- if $apiIngress.tls.enabled}}
+    cert-manager.io/cluster-issuer: {{ $apiIngress.tls.issuer }}
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    {{- end }}
+    {{- with $apiIngress.annotations }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  {{- with $apiIngress.className }}
+  ingressClassName: {{ . }}
+  {{- end }}
+  {{- if $apiIngress.tls.enabled }}
+  tls:
+    - hosts:
+        - {{ $apiIngress.host }}
+      secretName: {{ $apiIngress.tls.secretName }}
+  {{- end }}
+  rules:
+    - host: {{ $apiIngress.host }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "spotistats.fullname" . }}-api
+                port:
+                  number: 8080
