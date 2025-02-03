@@ -25,6 +25,13 @@ spec:
       containers:
         - name: web
           image: yooooomi/your_spotify_client:1.12.0
+          resources:
+            requests:
+              memory: "30Mi"
+              cpu: "10m"
+            limits:
+              memory: "50Mi"
+              cpu: "20m"
           ports:
             - containerPort: 3000
           env:
