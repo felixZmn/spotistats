@@ -25,13 +25,15 @@ spec:
       containers:
         - name: mongo
           image: mongo:6
+          {{- with .Values.db.resources }}
           resources:
             requests:
-              memory: "150Mi"
-              cpu: "10m"
+              memory: {{ .requests.memory }}
+              cpu: {{ .requests.cpu }}
             limits:
-              memory: "300Mi"
-              cpu: "30m"
+              memory: {{ .limits.memory }}
+              cpu: {{ .limits.cpu }}
+          {{- end }}
           ports:
             - containerPort: 27017
           volumeMounts:

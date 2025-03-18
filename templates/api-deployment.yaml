@@ -11,27 +11,22 @@ spec:
       {{- include "spotistats.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
       labels:
         app.kubernetes.io/component: api
         {{- include "spotistats.labels" . | nindent 8 }}
-        {{- with .Values.podLabels }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
     spec:
       containers:
         - name: api
           image: yooooomi/your_spotify_server:1.12.0
+          {{- with .Values.api.resources }}
           resources:
             requests:
-              memory: "150Mi"
-              cpu: "50m"
+              memory: {{ .requests.memory }}
+              cpu: {{ .requests.cpu }}
             limits:
-              memory: "250Mi"
-              cpu: "100m"
+              memory: {{ .limits.memory }}
+              cpu: {{ .limits.cpu }}
+          {{- end }}
           env:
             - name: LOG_LEVEL
               value: {{ .Values.vars.LOG_LEVEL }}

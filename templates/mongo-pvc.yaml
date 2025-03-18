@@ -3,7 +3,6 @@ kind: PersistentVolumeClaim
 metadata:
   name: {{ include "spotistats.fullname" . }}-pvc
 spec:
-  persistentVolumeReclaimPolicy: Retain
   accessModes:
     - ReadWriteOnce
   resources:
