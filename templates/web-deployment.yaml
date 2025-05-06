@@ -24,7 +24,8 @@ spec:
     spec:
       containers:
         - name: web
-          image: yooooomi/your_spotify_client:1.12.0
+          image: {{ .Values.web.image.repository }}/{{ .Values.web.image.image }}:{{ .Values.web.image.tag }}
+          imagePullPolicy: {{ .Values.web.image.pullPolicy }}
           {{- with .Values.web.resources }}
           resources:
             requests:

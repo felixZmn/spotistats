@@ -5,6 +5,11 @@ vars:
   LOG_LEVEL: "info"
 
 api:
+  image:
+    repository: docker.io
+    image: yooooomi/your_spotify_server
+    tag: "1.13.1"
+    pullPolicy: IfNotPresent
   ingress:
     host: ""
     className: "nginx"
@@ -22,6 +27,11 @@ api:
       cpu: "100m"
 
 web:
+  image:
+    repository: docker.io
+    image: yooooomi/your_spotify_client
+    tag: "1.13.1"
+    pullPolicy: IfNotPresent
   ingress:
     host: ""
     className: "nginx"
@@ -39,6 +49,11 @@ web:
       cpu: "50m"
 
 db:
+  image:
+    repository: docker.io
+    image: mongo
+    tag: "6.0.23"
+    pullPolicy: IfNotPresent
   resources:
     requests:
       memory: "150Mi"

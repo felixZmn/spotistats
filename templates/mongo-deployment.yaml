@@ -24,7 +24,8 @@ spec:
     spec:
       containers:
         - name: mongo
-          image: mongo:6
+          image: {{ .Values.db.image.repository }}/{{ .Values.db.image.image }}:{{ .Values.db.image.tag }}
+          imagePullPolicy: {{ .Values.db.image.pullPolicy }}
           {{- with .Values.db.resources }}
           resources:
             requests:

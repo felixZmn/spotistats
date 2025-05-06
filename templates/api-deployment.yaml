@@ -17,7 +17,8 @@ spec:
     spec:
       containers:
         - name: api
-          image: yooooomi/your_spotify_server:1.12.0
+          image: {{ .Values.api.image.repository }}/{{ .Values.api.image.image }}:{{ .Values.api.image.tag }}
+          imagePullPolicy: {{ .Values.api.image.pullPolicy }}
           {{- with .Values.api.resources }}
           resources:
             requests:
