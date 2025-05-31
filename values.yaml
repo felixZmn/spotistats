@@ -4,6 +4,9 @@ vars:
   TIMEZONE: "Europe/Berlin"
   LOG_LEVEL: "info"
 
+sensitiveVars:
+  secretName: "spotistats-secrets"
+
 api:
   image:
     repository: docker.io
