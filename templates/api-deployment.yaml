@@ -29,7 +29,7 @@ spec:
               cpu: {{ .limits.cpu }}
           {{- end }}
           envFrom:
-            - configMapKeyRef:
+            - secretRef:
                 name: {{ .Values.sensitiveVars.secretName }}
           env:
             - name: LOG_LEVEL
