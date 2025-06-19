@@ -28,12 +28,7 @@ spec:
           imagePullPolicy: {{ .Values.web.image.pullPolicy }}
           {{- with .Values.web.resources }}
           resources:
-            requests:
-              memory: {{ .requests.memory }}
-              cpu: {{ .requests.cpu }}
-            limits:
-              memory: {{ .limits.memory }}
-              cpu: {{ .limits.cpu }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
           ports:
             - containerPort: 3000

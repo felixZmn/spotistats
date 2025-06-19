@@ -21,12 +21,7 @@ spec:
           imagePullPolicy: {{ .Values.api.image.pullPolicy }}
           {{- with .Values.api.resources }}
           resources:
-            requests:
-              memory: {{ .requests.memory }}
-              cpu: {{ .requests.cpu }}
-            limits:
-              memory: {{ .limits.memory }}
-              cpu: {{ .limits.cpu }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
           envFrom:
             - secretRef:
